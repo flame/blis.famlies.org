@@ -3,85 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Performance Data Visualization</title>
-    <link rel="stylesheet" href="style.css?v=2">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://sql.js.org/dist/sql-wasm.js"></script>
+    <title>FAMLIES - Advanced Linear Algebra Framework</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>BLIS Performance Dashboard</h1>
-
-        <div class="db-loader" id="db-loader">
-            <div class="progress-container" id="progress-container">
-                <div class="progress-label">Loading database...</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill"></div>
-                </div>
-                <div class="progress-text" id="progress-text">0%</div>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <span class="logo-placeholder">FAMLIES</span>
+                </a>
             </div>
-            <div class="db-status" id="db-status">Loading perf.sqlite...</div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link active">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="personnel.html" class="nav-link">Personnel</a>
+                </li>
+                <li class="nav-item">
+                    <a href="publications.html" class="nav-link">Publications</a>
+                </li>
+                <li class="nav-item">
+                    <a href="software.html" class="nav-link">Software</a>
+                </li>
+                <li class="nav-item">
+                    <a href="events.html" class="nav-link">Events</a>
+                </li>
+            </ul>
         </div>
+    </nav>
 
-        <div class="error-message" id="error-message"></div>
-        <div class="success-message" id="success-message"></div>
-
-        <!-- Machine Overview View -->
-        <div class="view-container" id="overview-view">
-            <!-- Branch/Tag Selectors -->
-            <div class="branch-selector-container">
-                <div class="branch-selector-group">
-                    <label for="test-branch-select">Test Branch/Tag:</label>
-                    <select id="test-branch-select" class="branch-select">
-                        <option value="">Loading...</option>
-                    </select>
-                </div>
-                <div class="branch-selector-group">
-                    <label for="reference-branch-select">Reference Branch/Tag:</label>
-                    <select id="reference-branch-select" class="branch-select">
-                        <option value="">Loading...</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Color Legend -->
-            <div class="color-legend">
-                <div class="legend-item">
-                    <div class="legend-box legend-green"></div>
-                    <span>Performance Improvement</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-box legend-blue"></div>
-                    <span>Stable Performance</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-box legend-yellow"></div>
-                    <span>Possible Regression</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-box legend-red"></div>
-                    <span>Major Regression</span>
-                </div>
-            </div>
-
-            <p>Click on a machine card to view details</p>
-
-            <div class="machines-grid" id="machines-grid"></div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>FAMLIES</h1>
+            <p class="hero-subtitle">A Framework for Advanced (Multi)Linear Infrastructure in Engineering and Science</p>
+            <p class="hero-description">Vertically integrated dense linear and tensor algebra software for modern scientific computing and machine learning</p>
         </div>
+        <a href="#about" class="cta-button">Scroll Down to Learn More 🡳</a>
+    </section>
 
-        <!-- Machine Detail View -->
-        <div class="view-container" id="detail-view">
-            <button class="btn-back" onclick="backToOverview()" title="Back to Overview">
-                <span class="back-arrow">←</span> Back
-            </button>
-            <div class="machine-detail-header">
-                <h2 id="detail-machine-name">Machine Details</h2>
-                <p id="detail-machine-info"></p>
+    <!-- Main Content -->
+    <main>
+        <!-- Section 1: Motivation -->
+        <section id="about" class="content-section">
+            <div class="section-container">
+                <div class="section-content left">
+                    <h2>The Problem</h2>
+                    <p>For decades, BLAS and LAPACK have been the foundation of computational science. But their design enforces strict boundaries between layers—between single-node and multi-node computation, between matrix operations and tensor contractions, between CPU and GPU execution.</p>
+                    <p>These boundaries were once a strength, but are now a liability. Memory movement is the central bottleneck of modern hardware, and the only way to reduce it is to fuse operations across the stack. Existing libraries cannot do this.</p>
+                </div>
+                <div class="section-image right">
+                    <div class="placeholder-image">
+                        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="400" height="300" fill="#f0f0f0"/>
+                            <text x="200" y="150" font-size="18" text-anchor="middle" fill="#999" dy=".3em">Traditional Stack Architecture</text>
+                        </svg>
+                    </div>
+                </div>
             </div>
-            <div class="historical-data-container" id="historical-data-container"></div>
-        </div>
-    </div>
+        </section>
 
-    <script src="plot.js"></script>
+        <!-- Section 2: Solution -->
+        <section class="content-section">
+            <div class="section-container">
+                <div class="section-image left">
+                    <div class="placeholder-image">
+                        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="400" height="300" fill="#f0f0f0"/>
+                            <text x="200" y="150" font-size="18" text-anchor="middle" fill="#999" dy=".3em">Vertically Integrated FAMLIES</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="section-content right">
+                    <h2>The Solution: FAMLIES</h2>
+                    <p><strong>FAMLIES can.</strong> By vertically integrating layers that are today rigidly separated—from BLAS-level kernels through LAPACK-equivalent routines to distributed tensor contractions—FAMLIES aims to eliminate the performance ceilings that hold back both scientific computing and modern AI workloads.</p>
+                    <p>This project lays the foundation for a new framework that overcomes challenges through vertical integration, the flexible control of algorithms and communication, and a consistent programming API across levels.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Research Objectives -->
+        <section class="content-section bg-light">
+            <div class="section-container">
+                <h2 class="section-title">Research Objectives</h2>
+                <div class="objectives-grid">
+                    <div class="objective-card">
+                        <h3>Algorithm Families, Not Hard-Coded Choices</h3>
+                        <p>FAMLIES automatically selects the best algorithmic variant for the problem size, target hardware, and memory hierarchy level—replacing the rigid, single-algorithm approach of LAPACK and its descendants.</p>
+                    </div>
+                    <div class="objective-card">
+                        <h3>Vertical Integration Across the Full Stack</h3>
+                        <p>A consistent API spanning from architecture micro-kernels up through distributed computation. Cross-layer fusion becomes possible, enabling communication-avoiding algorithms.</p>
+                    </div>
+                    <div class="objective-card">
+                        <h3>Unified Linear and Tensor Algebra</h3>
+                        <p>Dense matrix operations and tensor contractions share deep mathematical structure. FAMLIES integrates both—using BLIS 2.0 building blocks to power higher tensor operations.</p>
+                    </div>
+                    <div class="objective-card">
+                        <h3>Portable, Architecture-Aware Performance</h3>
+                        <p>Targets x86-64, ARM, IBM POWER, RISC-V, and GPU accelerators with near-optimal performance on each through architecture-specific micro-kernels.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Impact -->
+        <section class="content-section">
+            <div class="section-container">
+                <div class="section-content left">
+                    <h2>Impact on Scientific Computing</h2>
+                    <p>FAMLIES addresses fundamental challenges in scientific computing and machine learning:</p>
+                    <ul class="impact-list">
+                        <li>Reduces memory movement—the central bottleneck of modern hardware</li>
+                        <li>Enables cross-layer fusion for communication-avoiding algorithms</li>
+                        <li>Provides flexible algorithm selection for different hardware and problem sizes</li>
+                        <li>Supports emerging architectures while maintaining performance</li>
+                        <li>Creates unified abstractions across linear and tensor operations</li>
+                    </ul>
+                </div>
+                <div class="section-image right">
+                    <div class="placeholder-image">
+                        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="400" height="300" fill="#f0f0f0"/>
+                            <text x="200" y="150" font-size="18" text-anchor="middle" fill="#999" dy=".3em">Performance Analysis</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Project Details -->
+        <section class="content-section bg-light">
+            <div class="section-container">
+                <h2 class="section-title">Project Details</h2>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <h3>Institutions</h3>
+                        <p>Multi-institutional collaboration across leading research universities</p>
+                    </div>
+                    <div class="detail-item">
+                        <h3>Funding</h3>
+                        <p>NSF Cyberinfrastructure for Sustained Scientific Innovation (CSSI) Program, 2025–2028</p>
+                    </div>
+                    <div class="detail-item">
+                        <h3>Foundation</h3>
+                        <p>Built on proven software: BLIS, libflame, and TBLIS</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Getting Started -->
+        <section class="content-section">
+            <div class="section-container">
+                <div class="cta-section">
+                    <div class="cta-card">
+                        <h3>Learn More</h3>
+                        <p>Read the FAMLIES vision paper on arXiv</p>
+                        <a href="https://arxiv.org/abs/2604.07311" class="link-button" target="_blank">View on arXiv</a>
+                    </div>
+                    <div class="cta-card">
+                        <h3>Related Projects</h3>
+                        <p>Explore the foundation libraries on GitHub</p>
+                        <a href="https://github.com/flame/blis" class="link-button" target="_blank">BLIS Repository</a>
+                    </div>
+                    <div class="cta-card">
+                        <h3>Meet the Team</h3>
+                        <p>Learn about our researchers and institutions</p>
+                        <a href="personnel.html" class="link-button">View Personnel</a>
+                    </div>
+                </div>
+                <h2 class="section-title text-center">Get Involved</h2>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 FAMLIES Project. A multi-institutional research initiative.</p>
+            <p>NSF Award OAC-2513927, OAC-2513928, OAC-2513929</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

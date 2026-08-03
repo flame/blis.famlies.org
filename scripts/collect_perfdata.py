@@ -681,6 +681,35 @@ def create_job_directory(
         return None
 
 
+def get_commit_timestamp(repo_dir: Path, commit_hash: str) -> str | None:
+    """
+    Get the commit timestamp for a given commit hash.
+
+    Args:
+        repo_dir (Path): Directory of the git repository
+        commit_hash (str): Full commit hash
+
+    Returns:
+        str | None: Commit timestamp in ISO format if successful, None otherwise
+    """
+    try:
+        result = subprocess.run(
+            ["git", "show", "-s", "--format=%cI", commit_hash],
+            capture_output=True,
+            cwd=repo_dir,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            return result.stdout.strip()
+        else:
+            print(f"Error getting commit timestamp: {result.stderr}")
+            return None
+    except Exception as e:
+        print(f"Error during git show: {e}")
+        return None
+
+
 def process_git_ref(
     git_ref: str,
     commit_hash: str,
@@ -739,6 +768,9 @@ def process_git_ref(
     job_config["compiler"] = compiler_info
     job_config["machine"] = config["machine"]
     job_config["tag"] = git_tag
+    job_config["timestamp"] = get_commit_timestamp(repo_dir, commit_hash)
+    if user_comment:
+        job_config["comment"] = user_comment
 
     # Build BLIS and generate test executable
     print()

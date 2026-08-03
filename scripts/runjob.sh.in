@@ -130,7 +130,7 @@ for i in "${!THREADS_ARRAY[@]}"; do
         echo "Warning: Test suite exited abnormally"
     fi
 
-    #rm -f input.general input.operations
+    rm -f input.general input.operations
 
     echo ""
 done

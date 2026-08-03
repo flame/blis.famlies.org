@@ -445,9 +445,10 @@ button {
 .machine-card-chart-grid {
     gap: 5px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
 }
 
+/*
 @media (max-width: 1200px) {
     .machine-card-chart-grid {
         grid-template-columns: 1fr 1fr;
@@ -459,6 +460,7 @@ button {
         grid-template-columns: 1fr;
     }
 }
+*/
 
 .machine-card-chart {
     background: white;

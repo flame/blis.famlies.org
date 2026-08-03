@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software - FAMLIES Project</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <span class="logo-placeholder">FAMLIES</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="personnel.html" class="nav-link">Personnel</a>
+                </li>
+                <li class="nav-item">
+                    <a href="publications.html" class="nav-link">Publications</a>
+                </li>
+                <li class="nav-item">
+                    <a href="software.html" class="nav-link active">Software</a>
+                </li>
+                <li class="nav-item">
+                    <a href="events.html" class="nav-link">Events</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header software-header">
+        <div class="header-content">
+            <h1>Software</h1>
+            <p>Foundation libraries and related software projects</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Foundation Libraries -->
+        <section class="content-section">
+            <div class="section-container">
+                <h2 class="section-title">Foundation Libraries</h2>
+                <p style="text-align: center; color: var(--secondary-color); margin-bottom: 2rem; font-size: 1.05rem;">FAMLIES builds upon and extends these foundational libraries:</p>
+                <div class="software-grid">
+                    <div class="software-card">
+                        <h3>BLIS</h3>
+                        <p class="software-desc">Basic Linear Algebra Subprograms library</p>
+                        <p>A portable, high-performance implementation of the BLAS API with a focus on architecture-aware performance. BLIS provides the micro-kernel layer that FAMLIES extends with algorithm selection and cross-layer fusion capabilities.</p>
+                        <div class="software-stats">
+                            <span class="stat-item">Language: C</span>
+                            <span class="stat-item">License: BSD</span>
+                        </div>
+                        <a href="https://github.com/flame/blis" class="software-link" target="_blank">View on GitHub →</a>
+                    </div>
+
+                    <div class="software-card">
+                        <h3>libflame</h3>
+                        <p class="software-desc">Formal Linear Algebra Methods Environment</p>
+                        <p>An object-oriented library for dense linear algebra operations, supporting algorithm variants and auto-tuning. libflame demonstrates the principle of algorithm families that FAMLIES extends to the full software stack.</p>
+                        <div class="software-stats">
+                            <span class="stat-item">Language: C</span>
+                            <span class="stat-item">License: BSD</span>
+                        </div>
+                        <a href="https://github.com/flame/libflame" class="software-link" target="_blank">View on GitHub →</a>
+                    </div>
+
+                    <div class="software-card">
+                        <h3>TBLIS</h3>
+                        <p class="software-desc">Tensor Basic Linear Algebra Subprograms</p>
+                        <p>High-performance tensor contraction library designed for distributed-memory systems and GPU acceleration. TBLIS demonstrates how tensor operations can be integrated with linear algebra infrastructure, a key principle of FAMLIES.</p>
+                        <div class="software-stats">
+                            <span class="stat-item">Language: C++</span>
+                            <span class="stat-item">License: BSD</span>
+                        </div>
+                        <a href="https://github.com/devinamatthews/tblis" class="software-link" target="_blank">View on GitHub →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Software Architecture -->
+        <section class="content-section bg-light">
+            <div class="section-container">
+                <h2 class="section-title">Software Architecture & Integration</h2>
+                <div class="architecture-content">
+                    <div class="architecture-section">
+                        <h3>Layered Design</h3>
+                        <p>
+                            FAMLIES proposes a vertically integrated architecture that spans multiple layers:
+                        </p>
+                        <ul class="architecture-list">
+                            <li><strong>Micro-kernels:</strong> Highly optimized compute kernels for specific hardware</li>
+                            <li><strong>BLIS Layer:</strong> Portable, high-performance BLAS implementation</li>
+                            <li><strong>libflame Layer:</strong> Dense linear algebra operations with algorithm selection</li>
+                            <li><strong>TBLIS Layer:</strong> Tensor operations and contractions</li>
+                            <li><strong>Application Layer:</strong> Scientific computing and machine learning frameworks</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-section">
+                        <h3>Key Principles</h3>
+                        <p>
+                            The FAMLIES framework is built on several core principles:
+                        </p>
+                        <ul class="architecture-list">
+                            <li><strong>Vertical Integration:</strong> Elimination of rigid layer boundaries enables cross-layer optimization</li>
+                            <li><strong>Algorithm Families:</strong> Automatic selection of optimal algorithms for problem and hardware</li>
+                            <li><strong>Communication Awareness:</strong> Explicit control and reduction of data movement</li>
+                            <li><strong>Architecture Portability:</strong> Support for diverse hardware platforms without sacrificing performance</li>
+                            <li><strong>Consistent API:</strong> Unified programming interface across all layers</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-section">
+                        <h3>Future Development</h3>
+                        <p>
+                            The FAMLIES project includes plans for:
+                        </p>
+                        <ul class="architecture-list">
+                            <li>Extended GPU acceleration and support for emerging accelerators</li>
+                            <li>Distributed-memory algorithms and multi-node optimizations</li>
+                            <li>Enhanced tensor contraction capabilities</li>
+                            <li>Integration with machine learning frameworks</li>
+                            <li>Performance autotuning infrastructure</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Software Resources -->
+        <section class="content-section">
+            <div class="section-container">
+                <h2 class="section-title">Additional Resources</h2>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <h3>FLAME Project</h3>
+                        <p>The broader FLAME (Formal Linear Algebra Methods Environment) project that provides the foundation for FAMLIES development.</p>
+                        <a href="https://github.com/flame/" class="resource-link" target="_blank">FLAME on GitHub →</a>
+                    </div>
+                    <div class="resource-card">
+                        <h3>Documentation</h3>
+                        <p>Access detailed documentation, tutorials, and technical references for all foundation libraries.</p>
+                        <a href="#" class="resource-link">Coming Soon →</a>
+                    </div>
+                    <div class="resource-card">
+                        <h3>Contributions</h3>
+                        <p>Information about contributing to FAMLIES and related open-source projects.</p>
+                        <a href="#" class="resource-link">Contribution Guide →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 FAMLIES Project. A multi-institutional research initiative.</p>
+            <p>NSF Award OAC-2513927, OAC-2513928, OAC-2513929</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

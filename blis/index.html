@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Data Visualization</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://sql.js.org/dist/sql-wasm.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>BLIS Performance Dashboard</h1>
+
+        <div class="db-loader" id="db-loader">
+            <div class="progress-container" id="progress-container">
+                <div class="progress-label">Loading database...</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text" id="progress-text">0%</div>
+            </div>
+            <div class="db-status" id="db-status">Loading perf.sqlite...</div>
+        </div>
+
+        <div class="error-message" id="error-message"></div>
+        <div class="success-message" id="success-message"></div>
+
+        <!-- Machine Overview View -->
+        <div class="view-container" id="overview-view">
+            <!-- Branch/Tag Selectors -->
+            <div class="branch-selector-container">
+                <div class="branch-selector-group">
+                    <label for="test-branch-select">Test Branch/Tag:</label>
+                    <select id="test-branch-select" class="branch-select">
+                        <option value="">Loading...</option>
+                    </select>
+                </div>
+                <div class="branch-selector-group">
+                    <label for="reference-branch-select">Reference Branch/Tag:</label>
+                    <select id="reference-branch-select" class="branch-select">
+                        <option value="">Loading...</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Color Legend -->
+            <div class="color-legend">
+                <div class="legend-item">
+                    <div class="legend-box legend-green"></div>
+                    <span>Performance Improvement</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box legend-blue"></div>
+                    <span>Stable Performance</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box legend-yellow"></div>
+                    <span>Possible Regression</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box legend-red"></div>
+                    <span>Major Regression</span>
+                </div>
+            </div>
+
+            <p>Click on a machine card to view details</p>
+
+            <div class="machines-grid" id="machines-grid"></div>
+        </div>
+
+        <!-- Machine Detail View -->
+        <div class="view-container" id="detail-view">
+            <button class="btn-back" onclick="backToOverview()" title="Back to Overview">
+                <span class="back-arrow">←</span> Back
+            </button>
+            <div class="machine-detail-header">
+                <h2 id="detail-machine-name">Machine Details</h2>
+                <p id="detail-machine-info"></p>
+            </div>
+            <div class="historical-data-container" id="historical-data-container"></div>
+        </div>
+    </div>
+
+    <script src="plot.js"></script>
+</body>
+</html>

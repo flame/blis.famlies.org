@@ -3,8 +3,9 @@
 from math import exp
 from operator import itemgetter
 import random
+from pathlib import Path
 
-from upload_perfdata import insert_data, open_database
+from upload_perfdata import insert_data, open_local_database
 
 
 def generate_testdata(
@@ -196,8 +197,12 @@ def main():
         },
     ]
 
-    print(f"\nCreating/connecting to database {db_file}...")
-    conn = open_database(db_file)
+    print(f"\nCreating database {db_file}...")
+    db_file = Path(db_file)
+    if db_file.exists():
+        print(f"Warning: Database {db_file} already exists. It will be overwritten.")
+        db_file.unlink()
+    conn = open_local_database(db_file)
 
     for machine in machines:
         for t, hi, lo, step in zip(*itemgetter("threads", "hi", "lo", "step")(machine)):
@@ -242,8 +247,13 @@ def main():
                     f"Estimated total time for {len(data['operations'])} operations: {total_time / 3600:.2f} hours"
                 )
 
+                data["commit"] = git_commit
+                data["tag"] = git_tag
+                data["machine"] = machine["machine"]
+                data["timestamp"] = commit["timestamp"]
+
                 print(f"Saving data to {db_file}...")
-                insert_data(conn, data, git_commit, git_tag, machine=machine["machine"])
+                insert_data(conn, data)
 
     conn.close()
     print("Done!")

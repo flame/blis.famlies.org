@@ -21,35 +21,27 @@ The script assumes:
 import argparse
 import json
 import sqlite3
+import mysql.connector
+import mysql.connector.pooling
+import mysql.connector.abstracts
 import subprocess
 import sys
 import yaml
 import re
 from pathlib import Path
-from datetime import datetime
 
 
-# FTPS server configuration
-FTPS_URL = "ftps://ftp.box.com/blis.famlies.org/perf.sqlite"
-DOWNLOADED_DB = "perf.sqlite.downloaded"
-MERGED_DB = "perf.sqlite.merged"
-FINAL_DB = "perf.sqlite"
-DB_COLUMNS = {
-    "id": "INTEGER PRIMARY KEY AUTOINCREMENT",
-    "tag": "TEXT",
-    "git": "TEXT",
-    "timestamp": "DATETIME DEFAULT CURRENT_TIMESTAMP",
-    "machine": "TEXT",
-    "threads": "INTEGER",
-    "gflops": "REAL",
-    "m": "INTEGER",
-    "n": "INTEGER",
-    "k": "INTEGER",
-    "op": "TEXT",
-    "dt": "TEXT",
-    "config": "TEXT",
-    "comment": "TEXT",
-}
+type LocalConnection = sqlite3.Connection
+
+type RemoteConnection = (
+    mysql.connector.pooling.PooledMySQLConnection
+    | mysql.connector.abstracts.MySQLConnectionAbstract
+)
+
+
+REMOTE_DB_USER = "blis"
+REMOTE_DB_PASSWORD = "blis"
+REMOTE_DB_NAME = "famlvkgo_blis-perf-ci"
 
 
 def parse_arguments():
@@ -58,30 +50,30 @@ def parse_arguments():
         description="Upload merged performance data to central database"
     )
     parser.add_argument(
-        "--keep-downloaded",
+        "--keep-local",
         action="store_true",
-        help="Keep downloaded database after merging",
-    )
-    parser.add_argument(
-        "--keep-merged",
-        action="store_true",
-        help="Keep merged database after uploading",
+        help="Keep local database after uploading",
     )
     parser.add_argument(
         "-n",
         "--dry-run",
         action="store_true",
-        help="Skip download and upload steps, only merge local databases",
+        help="Skip upload step, only merge local database",
     )
     parser.add_argument(
         "-s",
         "--status",
         help="YAML file to save the status of each git reference (most recent commit) after processing",
     )
+    parser.add_argument(
+        "-t",
+        "--tunnel",
+        help="Open an SSH tunnel to a remote database before uploading ([user@]host[:port[:local_port]])",
+    )
 
     args = parser.parse_args()
     if args.dry_run:
-        args.keep_merged = True
+        args.keep_local = True
 
     return args
 
@@ -192,28 +184,54 @@ def parse_testsuite(filepath: str | Path) -> dict:
     return data
 
 
-def open_database(db_path: str | Path) -> sqlite3.Connection:
-    """Create SQLite database with run table."""
-    conn = sqlite3.connect(db_path)
+def open_local_database(path: str | Path) -> LocalConnection:
+    """Open SQLite database."""
+    conn = sqlite3.connect(path)
     cursor = conn.cursor()
 
-    cursor.execute(f"""
-        CREATE TABLE IF NOT EXISTS run(
-            {", ".join(f"{key} {value}" for key, value in DB_COLUMNS.items())}
+    cursor.execute(
+        """
+        CREATE TABLE perf (
+            `machine` text NOT NULL,
+            `config` text NOT NULL,
+            `commit` text NOT NULL,
+            `tag` text NOT NULL,
+            `timestamp` timestamp NOT NULL,
+            `comment` text DEFAULT NULL,
+            `gflops` double NOT NULL,
+            `m` int(11) DEFAULT NULL,
+            `n` int(11) DEFAULT NULL,
+            `k` int(11) DEFAULT NULL,
+            `op` text NOT NULL,
+            `dt` char(1) NOT NULL,
+            `threads` int(11) NOT NULL,
+            `ir_nt` int(11) DEFAULT NULL,
+            `jr_nt` int(11) DEFAULT NULL,
+            `ic_nt` int(11) DEFAULT NULL,
+            `jc_nt` int(11) DEFAULT NULL
         )
-    """)
+    """
+    )
 
     conn.commit()
     return conn
 
 
+def open_remote_database(url: str | Path, port: int | str = 3306) -> RemoteConnection:
+    """Open MySQL database."""
+    conn = mysql.connector.connect(
+        host=url,
+        port=int(port),
+        user=REMOTE_DB_USER,
+        password=REMOTE_DB_PASSWORD,
+        database=REMOTE_DB_NAME,
+    )
+    return conn
+
+
 def insert_data(
-    conn: sqlite3.Connection,
+    conn: LocalConnection,
     data: dict,
-    git_commit: str,
-    git_tag: str,
-    machine: str | None = None,
-    comment: str | None = None,
 ):
     """Insert parsed data into database."""
     cursor = conn.cursor()
@@ -221,17 +239,15 @@ def insert_data(
     for operation in data["operations"]:
         cursor.execute(
             """
-            INSERT INTO run (
-                tag, git, timestamp, machine, threads, gflops, m, n, k, op, dt, config, comment
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO `perf`
+                (`tag`, `commit`, `timestamp`, `machine`, `threads`, `gflops`, `m`, `n`, `k`, `op`, `dt`, `config`, `comment`)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
             (
-                git_tag,
-                git_commit,
-                data["timestamp"]
-                if "timestamp" in data
-                else datetime.now().isoformat(),
-                machine,
+                data["tag"],
+                data["commit"],
+                data["timestamp"],
+                data["machine"],
                 data["threads"],
                 operation["gflops"],
                 operation["m"],
@@ -240,7 +256,7 @@ def insert_data(
                 operation["op"],
                 operation["dt"],
                 data["config"],
-                comment,
+                data["comment"] if "comment" in data else None,
             ),
         )
 
@@ -249,10 +265,11 @@ def insert_data(
 
 def import_testsuite(
     testsuite_file: str | Path,
-    db_file: str | Path,
+    conn: LocalConnection,
     git_commit: str,
     git_tag: str,
-    machine: str | None = None,
+    timestamp: str,
+    machine: str,
     comment: str | None = None,
 ) -> bool:
     """
@@ -260,12 +277,12 @@ def import_testsuite(
 
     Arguments:
         testsuite_file (str or Path): Path to the output.testsuite file
-        db_file (str or Path): Path to the SQLite database file
+        conn (Connection): SQLite database connection
         git_commit (str): Git commit hash
         git_tag (str): Git tag/branch
         machine (str, optional): Machine name to store in the database
         comment (str, optional): Comment to store in the database
-
+        timestamp (str, optional): Timestamp to store in the database
     Returns:
         bool: True if successful, False otherwise
     """
@@ -276,6 +293,11 @@ def import_testsuite(
 
     print(f"Reading {testsuite_file}...")
     data = parse_testsuite(testsuite_file)
+    data["commit"] = git_commit
+    data["tag"] = git_tag
+    data["machine"] = machine
+    data["comment"] = comment if comment else ""
+    data["timestamp"] = timestamp
 
     print(f"Config: {data['config']}")
     print(f"Threads: {data['threads']}")
@@ -283,14 +305,10 @@ def import_testsuite(
 
     print(f"Git commit: {git_commit}")
     print(f"Git tag/branch: {git_tag}")
-
-    print(f"\nCreating/connecting to database {db_file}...")
-    conn = open_database(db_file)
+    print(f"Commit timestamp: {timestamp}")
 
     print(f"Inserting {len(data['operations'])} rows...")
-    insert_data(conn, data, git_commit, git_tag, machine, comment)
-
-    conn.close()
+    insert_data(conn, data)
     print("Done!")
 
     return True
@@ -376,109 +394,20 @@ def download_database(url, output_file):
         return "error"
 
 
-def merge_databases(target_db, source_db):
-    """
-    Merge a source database into a target database.
-
-    Copies all rows from the 'run' table in source_db to target_db.
-
-    Args:
-        target_db (Path or str): Path to target database
-        source_db (Path or str): Path to source database
-
-    Returns:
-        bool: True if successful, False otherwise
-    """
-    try:
-        conn_source = sqlite3.connect(str(source_db))
-        cursor_source = conn_source.cursor()
-
-        # Copy all rows from source.run to target.run
-        # except the 'id' column, which is auto-incremented in the target
-        cursor_source.execute(
-            f"""SELECT
-            {", ".join(DB_COLUMNS.keys() - {"id"})}
-            FROM run
-        """
-        )
-        data = cursor_source.fetchall()
-
-        conn_source.close()
-
-        conn_target = sqlite3.connect(str(target_db))
-        cursor_target = conn_target.cursor()
-
-        # Copy all rows from source.run to target.run
-        # except the 'id' column, which is auto-incremented in the target
-        cursor_target.executemany(
-            f"""INSERT INTO run (
-                {", ".join(DB_COLUMNS.keys() - {"id"})}
-            ) VALUES ({", ".join(["?"] * (len(DB_COLUMNS) - 1))})
-        """,
-            data,
-        )
-
-        conn_target.commit()
-        conn_target.close()
-
-        return True
-    except Exception as e:
-        print(f"  Error merging databases: {e}")
-        return False
-
-
-def upload_database(file_path, url):
-    """
-    Upload the merged database to the FTPS server using curl.
-
-    Args:
-        file_path (str): Local file path to upload
-        url (str): FTPS URL to upload to
-
-    Returns:
-        bool: True if successful, False otherwise
-    """
-    print(f"Uploading database to {url}...")
-    try:
-        result = subprocess.run(
-            ["curl", "-n", "-f", "--ssl-reqd", "-T", file_path, url],
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print("  ✓ Database uploaded successfully")
-            return True
-        else:
-            print(f"  Error uploading database: {result.stderr}")
-            return False
-    except FileNotFoundError:
-        print("  Error: curl command not found")
-        return False
-    except Exception as e:
-        print(f"  Error during upload: {e}")
-        return False
-
-
-def create_database(commit_dir: str | Path) -> bool:
+def import_commit_dir(commit_dir: str | Path, conn: LocalConnection) -> bool:
     """
     Import the output.testsuite file from a commit directory into a new SQLite database.
     If the database already exists, it will not be recreated.
 
     Arguments:
         commit_dir (str or Path): Path to the commit directory containing output.testsuite
+        conn (LocalConnection): SQLite database connection
 
     Returns:
         bool: True if successful, False otherwise
     """
     commit_dir = Path(commit_dir)
     commit_hash = commit_dir.name
-
-    db_path = commit_dir / FINAL_DB
-    if db_path.exists():
-        print(f"Database {db_path} already exists, recreating...")
-        db_path.unlink()  # Remove existing database to create a fresh one
-
     config_path = commit_dir / "config.yaml"
     if not config_path.exists():
         print(f"Error: config.yaml not found in {commit_dir}")
@@ -493,6 +422,7 @@ def create_database(commit_dir: str | Path) -> bool:
 
     machine = config.pop("machine", None)
     git_tag = config.pop("tag", None)
+    timestamp = config.pop("timestamp", None)
     comment = json.dumps(config)
 
     if not machine:
@@ -505,9 +435,9 @@ def create_database(commit_dir: str | Path) -> bool:
         return False
 
     for output_file in outputs:
-        print(f"\nImporting {output_file} into database {db_path}...")
+        print(f"\nImporting {output_file} into local database...")
         if not import_testsuite(
-            output_file, db_path, commit_hash, git_tag, machine, comment
+            output_file, conn, commit_hash, git_tag, timestamp, machine, comment
         ):
             print(f"Error: Failed to import {output_file}")
             return False
@@ -540,6 +470,112 @@ def record_status(commit_dir: Path) -> dict:
         return {}
 
 
+def upload_database(
+    local_conn: LocalConnection,
+    remote_conn: RemoteConnection,
+) -> bool:
+    """
+    Upload the local database to the remote database.
+
+    Args:
+        local_conn (LocalConnection): Local SQLite database connection
+        remote_conn (RemoteConnection): Remote MySQL database connection
+
+    Returns:
+        bool: True if successful, False otherwise
+    """
+
+    remote_conn.start_transaction()
+
+    local_cursor = local_conn.cursor()
+    remote_cursor = remote_conn.cursor()
+
+    def execute(local_stmt: str, remote_stmt: str) -> bool:
+        try:
+            local_cursor.execute(local_stmt)
+            while True:
+                rows = local_cursor.fetchmany(10000)
+                if not rows:
+                    break
+                remote_cursor.executemany(remote_stmt, rows)
+        except Exception as e:
+            match = re.search("INSERT INTO `([^`]+)`", remote_stmt)
+            table = match.group(1) if match else "<unknown>"
+            print(f"Error during upload of `{table}`: {e}")
+            remote_conn.rollback()
+            return False
+
+        return True
+
+    if not execute(
+        """
+        SELECT DISTINCT `machine`, `config`, `commit`, `tag`, date(`timestamp`) as `timestamp`, `comment`
+        FROM `perf`
+        """,
+        """
+        INSERT INTO `runs` (
+            `machine`, `config`, `commit`, `tag`, `timestamp`, `comment`
+        )
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """,
+    ):
+        return False
+
+    if not execute(
+        """
+        SELECT `gflops`, `m`, `n`, `k`, `op`, `dt`, `threads`, `ir_nt`, `jr_nt`, `ic_nt`, `jc_nt`, `machine`, `config`, `commit`, `tag`
+        FROM `perf`
+        """,
+        """
+        INSERT INTO `perf` (
+            `run`, `gflops`, `m`, `n`, `k`, `op`, `dt`, `threads`, `ic_nt`, `jc_nt`, `ir_nt`, `jr_nt`
+        )
+        SELECT `id`, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+        FROM `runs`
+        WHERE `runs`.`machine` = %s AND `runs`.`config` = %s AND `runs`.`commit` = %s AND `runs`.`tag` = %s
+        """,
+    ):
+        return False
+
+    if not execute(
+        """
+        SELECT MAX(`gflops`) as `gflops`, `op`, `dt`, `threads`, `machine`, `config`, `commit`, `tag`
+        FROM `perf`
+        GROUP BY `op`, `dt`, `threads`, `machine`, `config`, `commit`, `tag`
+        """,
+        """
+        INSERT INTO `max_perf` (
+            `run`, `gflops`, `op`, `dt`, `threads`
+        )
+        SELECT `id`, %s, %s, %s, %s
+        FROM `runs`
+        WHERE `runs`.`machine` = %s AND `runs`.`config` = %s AND `runs`.`commit` = %s AND `runs`.`tag` = %s
+        """,
+    ):
+        return False
+
+    if not execute(
+        """
+        SELECT MAX(`gflops`) as `gflops`, `op`, `dt`, `machine`, `config`, `commit`, `tag`
+        FROM `perf`
+        GROUP BY `op`, `dt`, `machine`, `config`, `commit`, `tag`
+        """,
+        """
+        INSERT INTO `max_perf` (
+            `run`, `gflops`, `op`, `dt`
+        )
+        SELECT `id`, %s, %s, %s
+        FROM `runs`
+        WHERE `runs`.`machine` = %s AND `runs`.`config` = %s AND `runs`.`commit` = %s AND `runs`.`tag` = %s
+        """,
+    ):
+        return False
+
+    remote_conn.commit()
+
+    return True
+
+
 def main():
     """Main entry point."""
 
@@ -557,33 +593,6 @@ def main():
         print("  Nothing to merge and upload")
         return
 
-    for commit_dir in commit_dirs:
-        print(f"\nImporting data into {commit_dir / FINAL_DB}...")
-        if not create_database(commit_dir):
-            print(f"Error: Failed to create database for {commit_dir}")
-            sys.exit(1)
-
-    print(f"\nFound {len(commit_dirs)} database(s):")
-    for commit_dir in commit_dirs:
-        print(f"  - {commit_dir.name}")
-
-    downloaded_path = Path.cwd() / DOWNLOADED_DB
-
-    if not args.dry_run:
-        # Download current database
-        print(f"\n{'=' * 60}")
-        print("Downloading current database")
-        print(f"{'=' * 60}\n")
-
-        download_result = download_database(FTPS_URL, str(downloaded_path))
-
-        if download_result == "error":
-            print("Error: Failed to download database (server error)")
-            sys.exit(1)
-
-    else:
-        download_result = "skipped"
-
     status_data = {}
     if args.status:
         status_file = Path(args.status)
@@ -595,105 +604,92 @@ def main():
                 print(f"Error reading status file '{status_file}': {e}")
                 sys.exit(1)
 
-    # Merge databases
-    print(f"\n{'=' * 60}")
-    print("Merging databases")
-    print(f"{'=' * 60}\n")
+    local_db_path = Path("perf.sqlite")
+    if local_db_path.exists():
+        print("Existing local database found, removing first")
+        local_db_path.unlink()
+    local_db = open_local_database(local_db_path)
 
-    merged_path = Path.cwd() / MERGED_DB
-    import shutil
-
-    first_to_merge = 0
-    if download_result == "success":
-        # Downloaded successfully, copy it as base for merging
-        try:
-            shutil.copy(str(downloaded_path), str(merged_path))
-            print(f"Copied downloaded database to {merged_path}")
-        except Exception as e:
-            print(f"Error copying database: {e}")
+    for commit_dir in commit_dirs:
+        print(f"\nImporting data from {commit_dir}...")
+        if not import_commit_dir(commit_dir, local_db):
+            print(f"Error: Failed to import data from {commit_dir}")
             sys.exit(1)
-    else:
-        # Database doesn't exist on server (404), use local databases as base
-        if download_result == "not_found":
-            print(
-                "Database doesn't exist on server, creating from local databases...\n"
-            )
-        else:
-            print(
-                "Download skipped, creating merged database from local databases...\n"
-            )
-        if not commit_dirs:
-            print("Error: No local databases to merge")
-            sys.exit(1)
-
-        # Use first local database as base
-        source_db = commit_dirs[0] / FINAL_DB
-        status_data.update(record_status(commit_dirs[0]))
-        try:
-            shutil.copy(str(source_db), str(merged_path))
-            print(f"Using first local database as base: {source_db}")
-        except Exception as e:
-            print(f"Error copying database: {e}")
-            sys.exit(1)
-
-        first_to_merge = 1  # Skip the first one since it's already copied
-
-    # Merge each local database into the merged database
-    for commit_dir in commit_dirs[first_to_merge:]:
-        source_db = commit_dir / FINAL_DB
         status_data.update(record_status(commit_dir))
-        print(f"\nMerging {source_db}...")
-        if not merge_databases(merged_path, source_db):
-            print(f"Error: Failed to merge {source_db}")
-            sys.exit(1)
-        print("  ✓ Merged successfully")
 
     if not args.dry_run:
-        # Upload merged database
         print(f"\n{'=' * 60}")
         print("Uploading merged database")
         print(f"{'=' * 60}\n")
 
-        if not upload_database(str(merged_path), FTPS_URL):
+        mysql_port = 3306  # Default local port for MySQL
+        tunnel = None
+        if args.tunnel:
+            # Parse the tunnel argument
+            parts = args.tunnel.split("@")
+            if len(parts) == 2:
+                host, ports = (
+                    parts[1].split(":", 1) if ":" in parts[1] else (parts[1], None)
+                )
+                user = parts[0]
+            else:
+                host, ports = (
+                    parts[0].split(":", 1) if ":" in parts[0] else (parts[0], None)
+                )
+                user = None
+
+            ssh_port = None
+            if ports:
+                if ":" in ports:
+                    ssh_port, mysql_port = ports.split(":", 1)
+                else:
+                    ssh_port = ports
+
+            ssh_command = ["ssh", "-fN", f"{user}@{host}" if user else host]
+            ssh_command.append("-L")
+            ssh_command.append(f"{mysql_port}:localhost:3306")
+            if ssh_port:
+                ssh_command.append("-p")
+                ssh_command.append(f"{ssh_port}")
+
+            print(f"Opening SSH tunnel to {host} on local port {mysql_port}...")
+            try:
+                tunnel = subprocess.Popen(ssh_command)
+                print("SSH tunnel established.")
+            except subprocess.CalledProcessError as e:
+                print(f"Error establishing SSH tunnel: {e}")
+                sys.exit(1)
+
+        remote_db = open_remote_database("localhost", mysql_port)
+        if not upload_database(local_db, remote_db):
             print("Error: Failed to upload database")
             sys.exit(1)
 
-    if args.status:
-        status_file = Path(args.status)
+        if tunnel:
+            print("Closing SSH tunnel...")
+            tunnel.terminate()
+            tunnel.wait()
+            print("SSH tunnel closed.")
+
+        if args.status:
+            status_file = Path(args.status)
+            try:
+                with open(status_file, "w") as f:
+                    yaml.safe_dump(status_data, f)
+            except Exception as e:
+                print(f"Error writing status file '{status_file}': {e}")
+                sys.exit(1)
+
+    if not args.keep_local:
         try:
-            with open(status_file, "w") as f:
-                yaml.safe_dump(status_data, f)
+            local_db_path.unlink()
+            print(f"Removed {local_db_path}")
         except Exception as e:
-            print(f"Error writing status file '{status_file}': {e}")
-            sys.exit(1)
-
-    # Cleanup
-    print(f"\n{'=' * 60}")
-    print("Cleanup")
-    print(f"{'=' * 60}\n")
-
-    try:
-        if download_result == "success":
-            if not args.keep_downloaded:
-                downloaded_path.unlink()
-                print(f"Removed {DOWNLOADED_DB}")
-            else:
-                print(f"Keeping {DOWNLOADED_DB} (use --keep-downloaded to control)")
-
-        if not args.keep_merged:
-            merged_path.unlink()
-            print(f"Removed {MERGED_DB}")
-        else:
-            print(f"Keeping {MERGED_DB} (use --keep-merged to control)")
-    except Exception as e:
-        print(f"Warning: Error during cleanup: {e}")
+            print(f"Warning: Error deleting {local_db_path}: {e}")
 
     print(f"\n{'=' * 60}")
     print("Upload Complete")
     print(f"{'=' * 60}")
-    print(f"  Timestamp: {datetime.now().isoformat()}")
-    print(f"  Databases merged: {len(commit_dirs)}")
-    print()
 
 
 if __name__ == "__main__":

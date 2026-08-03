@@ -43,4 +43,5 @@ jobs:
           curl -u "$BOX_USERNAME":"$BOX_PASSWORD" --ssl-reqd "$DATABASE_URL" --output site/perf.sqlite -v
       - name: Deploy to famlies.org via SSH
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/id_ed25519" site/ famlies.org:blis/
+          rsync -avz -e "ssh -i ~/.ssh/id_ed25519" site/ famlies.org:www/
+          rsync -avz -e "ssh -i ~/.ssh/id_ed25519" blis/ famlies.org:blis/

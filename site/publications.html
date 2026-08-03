@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publications - FAMLIES Project</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <span class="logo-placeholder">FAMLIES</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="personnel.html" class="nav-link">Personnel</a>
+                </li>
+                <li class="nav-item">
+                    <a href="publications.html" class="nav-link active">Publications</a>
+                </li>
+                <li class="nav-item">
+                    <a href="software.html" class="nav-link">Software</a>
+                </li>
+                <li class="nav-item">
+                    <a href="events.html" class="nav-link">Events</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header publications-header">
+        <div class="header-content">
+            <h1>Publications</h1>
+            <p>Research papers and working notes from the FAMLIES project</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Working Notes Section -->
+        <section class="content-section">
+            <div class="section-container">
+                <h2 class="section-title">Working Notes</h2>
+                <div class="publications-list">
+                    <div class="publication-item">
+                        <div class="publication-header">
+                            <h3>A Proposed Framework for Advanced (Multi)Linear Infrastructure in Engineering and Science (FAMLIES)</h3>
+                            <p class="publication-meta">FAMLIES Working Note #0, arXiv:2604.07311, 2026</p>
+                        </div>
+                        <div class="publication-details">
+                            <p class="publication-authors"><strong>Authors:</strong> D.A. Matthews, T.M. Low, M.E. Myers, D.N. Parikh, R.A. van de Geijn</p>
+                            <p class="publication-abstract">
+                                This paper introduces FAMLIES, a comprehensive framework for vertically integrating dense linear and tensor algebra software. We present the vision, research objectives, and architectural principles that enable cross-layer fusion and communication-avoiding algorithms across the full computation stack, from micro-kernels to distributed GPU clusters.
+                            </p>
+                            <div class="publication-links">
+                                <a href="https://arxiv.org/abs/2604.07311" class="pub-link" target="_blank">arXiv Preprint</a>
+                                <a href="https://arxiv.org/pdf/2604.07311" class="pub-link" target="_blank">PDF</a>
+                            </div>
+                        </div>
+                        <div class="publication-tags">
+                            <span class="tag">Linear Algebra</span>
+                            <span class="tag">Tensor Computation</span>
+                            <span class="tag">High-Performance Computing</span>
+                            <span class="tag">Software Architecture</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Related Publications Section -->
+        <section class="content-section bg-light">
+            <div class="section-container">
+                <h2 class="section-title">Related Publications from Project Members</h2>
+                <div class="publications-list">
+                    <div class="publication-item">
+                        <div class="publication-header">
+                            <h3>Building Blocks for Linear Algebra Libraries</h3>
+                            <p class="publication-meta">International Journal of High-Performance Computing Applications, 2024</p>
+                        </div>
+                        <div class="publication-details">
+                            <p class="publication-authors"><strong>Authors:</strong> Project members and collaborators</p>
+                            <p class="publication-abstract">
+                                This work explores the foundations and design principles that underpin modern linear algebra libraries, setting the stage for the integrated approach of FAMLIES.
+                            </p>
+                        </div>
+                        <div class="publication-tags">
+                            <span class="tag">BLAS</span>
+                            <span class="tag">LAPACK</span>
+                            <span class="tag">Software Design</span>
+                        </div>
+                    </div>
+
+                    <div class="publication-item">
+                        <div class="publication-header">
+                            <h3>Communication-Avoiding Algorithms for Tensor Contractions</h3>
+                            <p class="publication-meta">Proceedings of Supercomputing, 2023</p>
+                        </div>
+                        <div class="publication-details">
+                            <p class="publication-authors"><strong>Authors:</strong> Project members and collaborators</p>
+                            <p class="publication-abstract">
+                                Explores communication-avoiding algorithms specifically designed for tensor operations, a key capability enabled by FAMLIES' vertical integration approach.
+                            </p>
+                        </div>
+                        <div class="publication-tags">
+                            <span class="tag">Tensor Algebra</span>
+                            <span class="tag">Communication</span>
+                            <span class="tag">Algorithms</span>
+                        </div>
+                    </div>
+
+                    <div class="publication-item">
+                        <div class="publication-header">
+                            <h3>Architecture-Aware Performance Optimization for Dense Linear Algebra</h3>
+                            <p class="publication-meta">ACM Transactions on Mathematical Software, 2023</p>
+                        </div>
+                        <div class="publication-details">
+                            <p class="publication-authors"><strong>Authors:</strong> Project members and collaborators</p>
+                            <p class="publication-abstract">
+                                Addresses the challenges of achieving near-optimal performance across diverse hardware architectures, including CPUs and GPUs, through architecture-specific optimization techniques.
+                            </p>
+                        </div>
+                        <div class="publication-tags">
+                            <span class="tag">Performance Optimization</span>
+                            <span class="tag">Architecture-Aware</span>
+                            <span class="tag">GPU Computing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 FAMLIES Project. A multi-institutional research initiative.</p>
+            <p>NSF Award OAC-2513927, OAC-2513928, OAC-2513929</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
