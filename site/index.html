@@ -12,7 +12,7 @@
         <div class="nav-container">
             <div class="nav-logo">
                 <a href="index.html">
-                    <span class="logo-placeholder">FAMLIES</span>
+                    <img src="famlies_logo.png" alt="FAMLIES Logo" width="auto" height="50px" />
                 </a>
             </div>
             <ul class="nav-menu">
@@ -56,25 +56,21 @@
                     <p>These boundaries were once a strength, but are now a liability. Memory movement is the central bottleneck of modern hardware, and the only way to reduce it is to fuse operations across the stack. Existing libraries cannot do this.</p>
                 </div>
                 <div class="section-image right">
-                    <div class="placeholder-image">
-                        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="400" height="300" fill="#f0f0f0"/>
-                            <text x="200" y="150" font-size="18" text-anchor="middle" fill="#999" dy=".3em">Traditional Stack Architecture</text>
-                        </svg>
+                    <div class="section-image-content">
+                        <img src="traditional.jpg" alt="Traditional Architecture
+                        Stack" width="100%" height="300px" />
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Section 2: Solution -->
-        <section class="content-section">
+        <section class="content-section bg-light">
             <div class="section-container">
                 <div class="section-image left">
-                    <div class="placeholder-image">
-                        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="400" height="300" fill="#f0f0f0"/>
-                            <text x="200" y="150" font-size="18" text-anchor="middle" fill="#999" dy=".3em">Vertically Integrated FAMLIES</text>
-                        </svg>
+                    <div class="section-image-content">
+                        <img width="100%" height="auto" src="control_tree.png"
+                        alt="FAMLIES Control Tree" />
                     </div>
                 </div>
                 <div class="section-content right">
@@ -86,34 +82,47 @@
         </section>
 
         <!-- Section 3: Research Objectives -->
-        <section class="content-section bg-light">
+        <section class="content-section">
             <div class="section-container">
-                <h2 class="section-title">Research Objectives</h2>
                 <div class="objectives-grid">
-                    <div class="objective-card">
+                    <div class="objective-card objective-blue">
                         <h3>Algorithm Families, Not Hard-Coded Choices</h3>
                         <p>FAMLIES automatically selects the best algorithmic variant for the problem size, target hardware, and memory hierarchy level—replacing the rigid, single-algorithm approach of LAPACK and its descendants.</p>
                     </div>
-                    <div class="objective-card">
+                    <div class="objective-card objective-green">
                         <h3>Vertical Integration Across the Full Stack</h3>
                         <p>A consistent API spanning from architecture micro-kernels up through distributed computation. Cross-layer fusion becomes possible, enabling communication-avoiding algorithms.</p>
                     </div>
-                    <div class="objective-card">
+                    <div class="objective-card objective-purple">
                         <h3>Unified Linear and Tensor Algebra</h3>
-                        <p>Dense matrix operations and tensor contractions share deep mathematical structure. FAMLIES integrates both—using BLIS 2.0 building blocks to power higher tensor operations.</p>
+                        <p>Dense matrix operations and tensor contractions share
+                        deep mathematical structure. FAMLIES integrates
+                        both—using building blocks from BLIS and others to power higher-order tensor
+                        operations.</p>
                     </div>
-                    <div class="objective-card">
+                    <div class="objective-card objective-orange">
                         <h3>Portable, Architecture-Aware Performance</h3>
                         <p>Targets x86-64, ARM, IBM POWER, RISC-V, and GPU accelerators with near-optimal performance on each through architecture-specific micro-kernels.</p>
                     </div>
+                </div>
+                <div class="section-content">
+                <h2 class="section-title">Research Objectives</h2>
+                    <img src="research_objectives.png" alt="Research Objectives"
+                        width="100%" height="auto" />
                 </div>
             </div>
         </section>
 
         <!-- Section 4: Impact -->
-        <section class="content-section">
+        <section class="content-section bg-light">
             <div class="section-container">
-                <div class="section-content left">
+                <div class="section-image left">
+                    <div class="section-image-content">
+                        <img src="impact.jpg" alt="Impact on Scientific Computing"
+                            width="100%" height="auto" />
+                    </div>
+                </div>
+                <div class="section-content right">
                     <h2>Impact on Scientific Computing</h2>
                     <p>FAMLIES addresses fundamental challenges in scientific computing and machine learning:</p>
                     <ul class="impact-list">
@@ -124,50 +133,49 @@
                         <li>Creates unified abstractions across linear and tensor operations</li>
                     </ul>
                 </div>
-                <div class="section-image right">
-                    <div class="placeholder-image">
-                        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="400" height="300" fill="#f0f0f0"/>
-                            <text x="200" y="150" font-size="18" text-anchor="middle" fill="#999" dy=".3em">Performance Analysis</text>
-                        </svg>
-                    </div>
-                </div>
             </div>
         </section>
 
         <!-- Section 5: Project Details -->
-        <section class="content-section bg-light">
+        <section class="content-section">
             <div class="section-container">
-                <h2 class="section-title">Project Details</h2>
                 <div class="details-grid">
                     <div class="detail-item">
                         <h3>Institutions</h3>
-                        <p>Multi-institutional collaboration across leading research universities</p>
+                        <p>Multi-institutional collaboration across leading
+                        research universities</p>
+                        <img src="smu_logo.png" alt="Southern Methodist
+                        University Logo" width="auto" height="150px" />
+                        <img src="ut_logo.png" alt="University of Texas at Austin Logo" width="auto" height="150px" />
+                        <img src="cmu_logo.jpg" alt="Carnegie Mellon University Logo" width="auto" height="150px" />
                     </div>
-                    <div class="detail-item">
-                        <h3>Funding</h3>
-                        <p>NSF Cyberinfrastructure for Sustained Scientific Innovation (CSSI) Program, 2025–2028</p>
-                    </div>
-                    <div class="detail-item">
-                        <h3>Foundation</h3>
-                        <p>Built on proven software: BLIS, libflame, and TBLIS</p>
-                    </div>
+                </div>
+                <div>
+                    <h2 class="section-title">A Multi-Disciplinary Team</h2>
+                    <img src="multidisciplinary.jpg" alt="Multi-Disciplinary Team"
+                    width="auto" height="500px" />
                 </div>
             </div>
         </section>
 
         <!-- Section 6: Getting Started -->
-        <section class="content-section">
+        <section class="content-section bg-light">
             <div class="section-container">
+                <div class="section-content">
+                    <h2 class="section-title text-center">Get Involved</h2>
+                    <img src="get_involved.png" alt="Get Involved"
+                        width="100%" height="auto" />
+                </div>
                 <div class="cta-section">
                     <div class="cta-card">
-                        <h3>Learn More</h3>
-                        <p>Read the FAMLIES vision paper on arXiv</p>
-                        <a href="https://arxiv.org/abs/2604.07311" class="link-button" target="_blank">View on arXiv</a>
+                        <h3>Join the Conversation</h3>
+                        <p>Get the latest news and make your voice heard in our community</p>
+                        <a href="https://discord.gg/vu65xh673g" class="link-button" target="_blank">Join our Discord</a>
                     </div>
                     <div class="cta-card">
-                        <h3>Related Projects</h3>
+                        <h3>FAMLIES Products</h3>
                         <p>Explore the foundation libraries on GitHub</p>
+                        <a href="https://github.com/famlies" class="link-button" target="_blank">FAMLIES Repositories</a>
                         <a href="https://github.com/flame/blis" class="link-button" target="_blank">BLIS Repository</a>
                     </div>
                     <div class="cta-card">
@@ -176,7 +184,6 @@
                         <a href="personnel.html" class="link-button">View Personnel</a>
                     </div>
                 </div>
-                <h2 class="section-title text-center">Get Involved</h2>
             </div>
         </section>
     </main>

@@ -34,13 +34,6 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           echo "$SSH_CONFIG" > ~/.ssh/config
-      - name: Download database
-        env:
-          BOX_USERNAME: ${{ secrets.BOX_USERNAME }}
-          BOX_PASSWORD: ${{ secrets.BOX_PASSWORD }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: |
-          curl -u "$BOX_USERNAME":"$BOX_PASSWORD" --ssl-reqd "$DATABASE_URL" --output site/perf.sqlite -v
       - name: Deploy to famlies.org via SSH
         run: |
           rsync -avz -e "ssh -i ~/.ssh/id_ed25519" site/ famlies.org:www/

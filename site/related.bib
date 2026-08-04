@@ -1,0 +1,68 @@
+@misc{satyarth2026performanttridiagonalfactorizationskewsymmetric,
+      title={Performant Tridiagonal Factorization of Skew-Symmetric Matrices},
+      author={Ishna Satyarth and Chao Yin and Devin A. Matthews and Maggie Myers and Robert van de Geijn and RuQing G. Xu},
+      year={2026},
+      eprint={2411.09859},
+      archivePrefix={arXiv},
+      primaryClass={cs.MS},
+      abstract={The factorization of skew-symmetric matrices is a critically understudied area of dense linear algebra, particularly in comparison to that of general and symmetric matrices. While some algorithms can be adapted from the symmetric case, the cost of algorithms can be reduced by exploiting skew-symmetry. This work examines the factorization of a skew-symmetric matrix X into its LTLT decomposition, where L is unit lower triangular and T is tridiagonal. This is also known as a triangular tridiagonalization. This operation is a means for computing the determinant of X as the square of the (cheaply-computed) Pfaffian of the skew-symmetric tridiagonal matrix T as well as for solving systems of equations, across fields such as quantum electronic structure and machine learning. Its application also often requires pivoting in order to improve numerical stability. We compare and contrast previously-published algorithms with those systematically derived using the FLAME methodology. Performant parallel CPU implementations are achieved by fusing operations at multiple levels in order to reduce memory traffic overhead. A key factor is the employment of new capabilities of the BLAS-like Library Instantion Software (BLIS) framework, which now supports casting level-2 and level-3 BLAS-like operations by leveraging its gemm and other kernels, hierarchical parallelism, and cache blocking. A prototype, concise C++ API facilitates the translation of correct-by-construction algorithms into correct code. Experiments verify that the resulting implementations greatly exceed the performance of previous work. },
+      url={https://arxiv.org/abs/2411.09859},
+}
+
+@misc{vandegeijn2025derivingalgorithmstriangulartridiagonalization,
+      title={Deriving Algorithms for Triangular Tridiagonalization a Skew-Symmetric Matrix},
+      author={Robert van de Geijn and Maggie Myers and RuQing G. Xu and Devin Matthews},
+      year={2025},
+      eprint={2311.10700},
+      archivePrefix={arXiv},
+      primaryClass={cs.MS},
+      abstract={This paper provides technical details regarding the application of the FLAME methodology to derive algorithms hand in hand with their proofs of correctness for the computation of the LTL<sup>T</sup> decomposition (with and without pivoting) of a skew-symmetric matrix. The approach yields known as well as new algorithms, presented using the FLAME notation, enabling comparing and contrasting. A number of BLAS-like primitives are exposed at the core of the resulting unblocked and blocked algorithms. },
+      url={https://arxiv.org/abs/2311.10700},
+}
+
+@misc{vandegeijn2026enablingpivotingformalderivation,
+      title={Enabling Pivoting in the Formal Derivation of LU factorization},
+      author={Robert van de Geijn and Margaret E. Myers and Devangi N. Parikh and Tze Meng Low and Devin A. Matthews},
+      year={2026},
+      eprint={2304.03068},
+      archivePrefix={arXiv},
+      primaryClass={cs.MS},
+      abstract={ The FLAME methodology for deriving linear algebra algorithms from specification, first introduced around 2000, has been successfully applied to a broad cross section of operations. An open question has been whether it can yield algorithms for the best-known operation in linear algebra, LU factorization with partial pivoting (Gaussian elimination with row swapping). This paper shows that it can and provides general techniques for pivoted factorizations. }
+      url={https://arxiv.org/abs/2304.03068},
+}
+
+
+
+
+
+
+
+@article{doi:10.1137/16M108968X,
+author = {Matthews, Devin A.},
+title = {High-Performance Tensor Contraction without Transposition},
+journal = {SIAM Journal on Scientific Computing},
+volume = {40},
+number = {1},
+pages = {C1-C24},
+year = {2018},
+doi = {10.1137/16M108968X},
+
+URL = {
+
+        https://doi.org/10.1137/16M108968X
+
+
+
+},
+eprint = {
+
+        https://doi.org/10.1137/16M108968X
+
+
+
+}
+,
+    abstract = { Tensor computations---in particular tensor contraction (TC)---are important kernels in many scientific computing applications. Due to the fundamental similarity of TC to matrix multiplication and to the availability of optimized implementations such as the BLAS, tensor operations have traditionally been implemented in terms of BLAS operations, incurring both a performance and a storage overhead. Instead, we implement TC using the flexible BLAS-like Instantiation Software (BLIS) framework, which allows for transposition (reshaping) of the tensor to be fused with internal partitioning and packing operations, requiring no explicit transposition operations or additional workspace. This implementation, TBLIS, achieves performance approaching that of matrix multiplication, and in some cases considerably higher than that of traditional TC. Our implementation supports multithreading using an approach identical to that used for matrix multiplication in BLIS, with similar performance characteristics. The complexity of managing tensor-to-matrix transformations is also handled automatically in our approach, greatly simplifying its use in scientific applications. }
+}
+
+

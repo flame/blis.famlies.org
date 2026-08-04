@@ -1,44 +1,49 @@
+# Schema for events.yml
+#
+# events:                    # Root array containing all events
+#   - title: string         # Event title (required)
+#     date: YYYY-MM-DD      # Event date in ISO format (required)
+#     time_range: string    # Time range, e.g., "2:00 PM - 3:30 PM EST" (required)
+#     location: string      # Event location (required)
+#     description: string   # Event description (required)
+#     speakers:             # List of speaker names (optional)
+#       - string            # Individual speaker name
+#     event_link: string    # External event URL (optional)
+#     files:                # Array of downloadable resources (optional)
+#       - name: string      # File description
+#         url: string       # File URL path
+
 events:
-  - title: FAMLIES Project Overview Webinar
-    date: "2026-08-15"
-    time_range: "2:00 PM - 3:30 PM EST"
+  - title: FAMLIES Retreat (Day 2)
+    date: "2026-10-13"
+    time_range: "8:00 AM - 5:00 PM CST"
+    location: "Dallas, TX & Online"
+    description: "The FAMLIES Retreat is an invitation-only workshop that brings
+      together contributors to FAMLIES as well as those with a keen interest in the
+      project. This is your opportunity to connect with fellow researchers and
+      developers in the field of high-performance linear/multilinear algebra and
+      related fields."
+    event_link: "https://www.cs.utexas.edu/~flame/BLISRetreat2026"
+
+  - title: FAMLIES Retreat (Day 1)
+    date: "2026-10-12"
+    time_range: "8:00 AM - 5:00 PM CST"
+    location: "Dallas, TX & Online"
+    description: "The FAMLIES Retreat is an invitation-only workshop that brings
+      together contributors to FAMLIES as well as those with a keen interest in the
+      project. This is your opportunity to connect with fellow researchers and
+      developers in the field of high-performance linear/multilinear algebra and
+      related fields."
+    event_link: "https://www.cs.utexas.edu/~flame/BLISRetreat2026"
+
+  - title: "FAMILIES Kickoff"
+    date: "2026-08-21"
+    time_range: "10:00 AM - 11:00 AM CST"
     location: "Online"
-    description: "Join project leaders for an overview of FAMLIES, including the vision, research objectives, and current progress. This webinar is open to researchers, practitioners, and anyone interested in learning about the future of linear and tensor algebra software."
+    description: "Join us for the official kickoff of the FAMLIES project, where
+      we will outline our goals, introduce the team, and discuss the roadmap for
+      the upcoming years."
     speakers:
       - "Devin A. Matthews"
-      - "Robert A. van de Geijn"
-    event_link: "https://zoom.us/meeting"
-
-  - title: "Workshop: High-Performance Linear Algebra"
-    date: "2026-02-28"
-    time_range: "10:00 AM - 4:00 PM CST"
-    location: "Dallas, TX & Online"
-    description: "A full-day workshop covering the fundamentals of high-performance linear algebra libraries, algorithm families, and vertical integration strategies. Perfect for software engineers and researchers wanting to understand the technical foundations of FAMLIES."
-    speakers:
-      - "FAMLIES Project Team"
-
-  - title: "Conference Talk: FAMLIES at SC2026"
-    date: "2026-03-10"
-    time_range: "2:00 PM - 2:30 PM"
-    location: "New Orleans, LA"
-    description: "Project leaders will present the latest developments and architectural innovations in the FAMLIES framework at the 2026 Supercomputing Conference."
-    speakers:
-      - "Tze Meng Low"
-    event_link: "https://sc26.supercomputing.org"
-    files:
-      - name: "Presentation Slides"
-        url: "/resources/sc26-famlies-slides.pdf"
-
-  - title: "Algorithm Families Seminar Series"
-    date: "2026-08-05"
-    time_range: "3:00 PM - 4:00 PM CST"
-    location: "UT Austin, Gates Dell Complex 104"
-    description: "A seminar discussing recent advances in algorithm family design and how they enable performance portability across diverse hardware architectures."
-    speakers:
-      - "Margaret E. Myers"
-      - "Devangi N. Parikh"
-    files:
-      - name: "Seminar Recording"
-        url: "/resources/algorithm-families-seminar.mp4"
-      - name: "Discussion Notes"
-        url: "/resources/algorithm-families-notes.pdf"
+      - "Bimal Gaudel"
+    event_link: "https://smu.zoom.us/j/92799938502?pwd=YiPTogyKoTdzdtEFHLd35RWJ6Evnaw.1"

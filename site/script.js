@@ -77,9 +77,161 @@ async function loadEvents() {
     }
 }
 
+// Parse BibTeX format
+function parseBibTeX(bibContent) {
+    const entries = [];
+    const bibRegex = /@(\w+)\s*{\s*([^,]+),\s*([\s\S]*?)(?=@\w+\s*{|$)/g;
+    let match;
+
+    while ((match = bibRegex.exec(bibContent)) !== null) {
+        const type = match[1].toLowerCase();
+        const key = match[2].trim();
+        const fieldsText = match[3];
+
+        const fields = {};
+        const fieldRegex = /(\w+)\s*=\s*["{]([^"}]*)["}]/g;
+        let fieldMatch;
+
+        while ((fieldMatch = fieldRegex.exec(fieldsText)) !== null) {
+            const fieldName = fieldMatch[1].toLowerCase();
+            const fieldValue = fieldMatch[2].trim();
+            fields[fieldName] = fieldValue;
+        }
+
+        entries.push({
+            key: key,
+            type: type,
+            fields: fields
+        });
+    }
+
+    return entries;
+}
+
+// Generate publication links (URL, DOI, arXiv)
+function generatePublicationLinks(fields) {
+    const links = [];
+
+    if (fields.url) {
+        const url = fields.url;
+        const isArxiv = url.includes('arxiv.org');
+
+        if (isArxiv) {
+            // For arXiv URLs, add both abstract and PDF links
+            const arxivMatch = url.match(/arxiv\.org\/abs\/(\d+\.\d+)/);
+            if (arxivMatch) {
+                const arxivId = arxivMatch[1];
+                links.push({
+                    text: 'arXiv Preprint',
+                    url: url
+                });
+                links.push({
+                    text: 'PDF',
+                    url: `https://arxiv.org/pdf/${arxivId}.pdf`
+                });
+            }
+        } else {
+            links.push({
+                text: 'View Paper',
+                url: url
+            });
+        }
+    } else if (fields.doi) {
+        // Generate DOI link
+        const doiUrl = fields.doi.startsWith('http') ? fields.doi : `https://doi.org/${fields.doi}`;
+        links.push({
+            text: 'DOI',
+            url: doiUrl
+        });
+    }
+
+    return links;
+}
+
+// Format author names
+function formatAuthors(authorStr) {
+    if (!authorStr) return '';
+    return authorStr.split(' and ').map(a => a.trim()).join(', ');
+}
+
+// Create publication HTML element
+function createPublicationElement(entry) {
+    const { fields } = entry;
+
+    const title = fields.title || 'Untitled';
+    const authors = formatAuthors(fields.author || '');
+    const year = fields.year || '';
+    const journal = fields.journal || fields.booktitle || fields.institution || '';
+    const abstract = fields.abstract || '';
+
+    const links = generatePublicationLinks(fields);
+
+    let metaText = '';
+    if (journal && year) {
+        metaText = `${journal}, ${year}`;
+    } else if (journal) {
+        metaText = journal;
+    } else if (year) {
+        metaText = year;
+    }
+
+    let linksHTML = '';
+    if (links.length > 0) {
+        linksHTML = '<div class="publication-links">' +
+            links.map(link => `<a href="${link.url}" class="pub-link" target="_blank">${link.text}</a>`).join('') +
+            '</div>';
+    }
+
+    const html = `
+        <div class="publication-item">
+            <div class="publication-header">
+                <h3>${title}</h3>
+                ${metaText ? `<p class="publication-meta">${metaText}</p>` : ''}
+            </div>
+            <div class="publication-details">
+                ${authors ? `<p class="publication-authors"><strong>Authors:</strong> ${authors}</p>` : ''}
+                ${abstract ? `<p class="publication-abstract">${abstract}</p>` : ''}
+                ${linksHTML}
+            </div>
+        </div>
+    `;
+
+    return html;
+}
+
+// Load and render publications from BibTeX files
+async function loadPublications() {
+    try {
+        // Load FAWN publications
+        const fawnResponse = await fetch('fawns.bib');
+        const fawnText = await fawnResponse.text();
+        const fawnEntries = parseBibTeX(fawnText);
+
+        // Load related publications
+        const relatedResponse = await fetch('related.bib');
+        const relatedText = await relatedResponse.text();
+        const relatedEntries = parseBibTeX(relatedText);
+
+        // Render FAWN publications
+        const fawnContainer = document.querySelector('.fawn-publications-list');
+        if (fawnContainer && fawnEntries.length > 0) {
+            fawnContainer.innerHTML = fawnEntries.map(createPublicationElement).join('');
+        }
+
+        // Render related publications
+        const relatedContainer = document.querySelector('.related-publications-list');
+        if (relatedContainer && relatedEntries.length > 0) {
+            relatedContainer.innerHTML = relatedEntries.map(createPublicationElement).join('');
+        }
+    } catch (error) {
+        console.error('Error loading publications:', error);
+    }
+}
+
 // Load events on page load if on events page
 document.addEventListener('DOMContentLoaded', function() {
     loadEvents();
+    loadPublications();
 
     // Active navigation link tracking
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';

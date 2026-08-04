@@ -158,7 +158,7 @@ body {
     right: -20px;
     bottom: -20px;
     background-image:
-        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 300" preserveAspectRatio="none"><defs><filter id="roughen" height="2" width="1.6" color-interpolation-filters="sRGB"><feTurbulence baseFrequency="0.32065" seed="115" result="result1" numOctaves="1" type="turbulence"/><feDisplacementMap scale="10" yChannelSelector="G" in2="result1" xChannelSelector="R" in="SourceGraphic"/><feGaussianBlur stdDeviation="1.1169"/></filter></defs><path d="M 14,12 L 678,12 L 678,278 L 14,278 Z" fill="none" stroke="rgba(100,150,200,0.8)" stroke-width="4.5" filter="url(%23roughen)" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 300" preserveAspectRatio="none"><defs><filter id="roughen" height="2" width="1.6" color-interpolation-filters="sRGB"><feTurbulence baseFrequency="0.32065" seed="115" result="result1" numOctaves="1" type="turbulence"/><feDisplacementMap scale="10" yChannelSelector="G" in2="result1" xChannelSelector="R" in="SourceGraphic"/><feGaussianBlur stdDeviation="1.1169"/></filter></defs><path d="M 14,12 L 678,12 L 678,279 L 14,279 Z" fill="none" stroke="rgba(100,150,200,0.8)" stroke-width="4.5" filter="url(%23roughen)" stroke-linecap="round" stroke-linejoin="round"/></svg>');
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: 0 0;
@@ -219,11 +219,16 @@ main {
 }
 
 .content-section {
+    min-height: 100vh;
     padding: 80px var(--spacing-unit) * 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .content-section.bg-light {
-    background-color: var(--light-bg);
+    /* Removed for now so everything has white bg */
+    /* background-color: var(--light-bg); */
 }
 
 .section-container {
@@ -238,6 +243,12 @@ main {
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: center;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.section-container.wide {
+    grid-template-columns: 1fr;
 }
 
 .section-content {
@@ -267,12 +278,10 @@ main {
 
 .section-content.left {
     order: 1;
-    padding-left: 2rem;
 }
 
 .section-content.right {
     order: 2;
-    padding-right: 2rem;
 }
 
 .section-image.left {
@@ -293,6 +302,12 @@ main {
     overflow: hidden;
 }
 
+.section-image-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .placeholder-image svg {
     width: 100%;
     height: 100%;
@@ -305,6 +320,7 @@ main {
 .section-title {
     font-size: 2.5rem;
     font-weight: 700;
+    margin-top: 3rem;
     margin-bottom: 3rem;
     text-align: center;
     color: var(--primary-color);
@@ -321,15 +337,17 @@ main {
 .objectives-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    gap: 1rem;
 }
 
 .objective-card {
-    padding: 2rem;
+    padding: 1rem;
     background-color: var(--white);
     border-radius: 8px;
     border: 1px solid var(--border-color);
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .objective-card:hover {
@@ -338,17 +356,90 @@ main {
     transform: translateY(-4px);
 }
 
+/* Metallic Pastel Gradients for Objective Cards */
+.objective-card.objective-blue {
+    background: linear-gradient(135deg, #e8f2ff 0%, #d4e8ff 50%, #e8f2ff 100%);
+    position: relative;
+}
+
+.objective-card.objective-blue::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, transparent 30%, transparent 70%, rgba(100, 150, 200, 0.05) 100%);
+    pointer-events: none;
+    border-radius: 8px;
+}
+
+.objective-card.objective-green {
+    background: linear-gradient(135deg, #e8f5f0 0%, #d4f0e8 50%, #e8f5f0 100%);
+    position: relative;
+}
+
+.objective-card.objective-green::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, transparent 30%, transparent 70%, rgba(100, 180, 150, 0.05) 100%);
+    pointer-events: none;
+    border-radius: 8px;
+}
+
+.objective-card.objective-purple {
+    background: linear-gradient(135deg, #f5e8ff 0%, #ead4ff 50%, #f5e8ff 100%);
+    position: relative;
+}
+
+.objective-card.objective-purple::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, transparent 30%, transparent 70%, rgba(180, 100, 200, 0.05) 100%);
+    pointer-events: none;
+    border-radius: 8px;
+}
+
+.objective-card.objective-orange {
+    background: linear-gradient(135deg, #fff0e8 0%, #ffe8d4 50%, #fff0e8 100%);
+    position: relative;
+}
+
+.objective-card.objective-orange::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, transparent 30%, transparent 70%, rgba(220, 150, 100, 0.05) 100%);
+    pointer-events: none;
+    border-radius: 8px;
+}
+
 .objective-card h3 {
     font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 1rem;
     color: var(--primary-color);
+    position: relative;
+    z-index: 1;
 }
 
 .objective-card p {
     font-size: 0.95rem;
     color: var(--secondary-color);
     line-height: 1.8;
+    position: relative;
+    z-index: 1;
 }
 
 /* ============================================
@@ -389,7 +480,7 @@ main {
 
 .detail-item {
     padding: 2rem;
-    border-left: 3px solid var(--accent-color);
+    border-right: 3px solid var(--accent-color);
 }
 
 .detail-item h3 {
@@ -467,7 +558,7 @@ main {
    ============================================ */
 
 .page-header {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(240, 245, 255, 0.75) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%);
     padding: 60px var(--spacing-unit) * 2;
     text-align: center;
     display: flex;
@@ -477,19 +568,19 @@ main {
 }
 
 .page-header.personnel-header {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(240, 245, 255, 0.75) 100%), url('personnel.jpg') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%), url('personnel.jpg') center/cover no-repeat;
 }
 
 .page-header.events-header {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(240, 245, 255, 0.75) 100%), url('events.svg') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%), url('events.jpg') center/cover no-repeat;
 }
 
 .page-header.publications-header {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(240, 245, 255, 0.75) 100%), url('publications.svg') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%), url('publications.jpg') center/cover no-repeat;
 }
 
 .page-header.software-header {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(240, 245, 255, 0.75) 100%), url('software.svg') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%), url('code.png') center/cover no-repeat;
 }
 
 .header-content {
@@ -518,7 +609,7 @@ main {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2.5rem;
-    margin-top: 0;
+    margin-top: 2rem;
     padding: 0 2rem;
 }
 
@@ -545,6 +636,19 @@ main {
     transition: all 0.3s ease;
 }
 
+.person-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+}
+
+.person-card-link:hover .person-card {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    border-color: var(--accent-color);
+    transform: translateY(-4px);
+}
+
 .person-card:hover {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
     border-color: var(--accent-color);
@@ -561,6 +665,13 @@ main {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+}
+
+.person-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .person-image svg {
@@ -660,7 +771,7 @@ main {
 
 .institutions-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     margin-top: 2rem;
     padding: 0 2rem;
@@ -672,6 +783,11 @@ main {
     border-radius: 8px;
     border: 1px solid var(--border-color);
     transition: all 0.3s ease;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .institution-card:hover {
@@ -682,8 +798,14 @@ main {
 .institution-card h3 {
     font-size: 1.2rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
     color: var(--primary-color);
+}
+
+.institution-card img {
+    max-height: 120px;
+    width: auto;
+    object-fit: contain;
 }
 
 .institution-dept {
@@ -704,7 +826,9 @@ main {
    ============================================ */
 
 .publications-list {
-    margin-top: 2rem;
+    margin-top: 0;
+    padding-left: 2rem;
+    padding-right: 2rem;
 }
 
 .publication-item {
@@ -802,6 +926,8 @@ main {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
 }
 
 .software-card {
