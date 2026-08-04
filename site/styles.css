@@ -108,7 +108,7 @@ body {
    ============================================ */
 
 .hero {
-    background: url('bg.jpg') center/cover no-repeat;
+    background: url('images/bg.jpg') center/cover no-repeat;
     background-attachment: fixed;
     padding: 20px var(--spacing-unit) * 1;
     text-align: center;
@@ -532,7 +532,11 @@ main {
 .cta-card p {
     font-size: 0.95rem;
     color: var(--secondary-color);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.0rem;
+}
+
+.cta-card a {
+    margin-top: 0.5rem;
 }
 
 .link-button {
@@ -568,19 +572,19 @@ main {
 }
 
 .page-header.personnel-header {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%), url('personnel.jpg') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%), url('images/personnel.jpg') center/cover no-repeat;
 }
 
 .page-header.events-header {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%), url('events.jpg') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%), url('images/events.jpg') center/cover no-repeat;
 }
 
 .page-header.publications-header {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%), url('publications.jpg') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%), url('images/publications.jpg') center/cover no-repeat;
 }
 
 .page-header.software-header {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%), url('code.png') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 245, 255, 0.85) 100%), url('images/code.png') center/cover no-repeat;
 }
 
 .header-content {

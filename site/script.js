@@ -11,7 +11,7 @@ async function loadEvents() {
     if (!container) return;
 
     try {
-        const response = await fetch('events.yml');
+        const response = await fetch('config/events.yml');
         const yamlText = await response.text();
         const data = jsyaml.load(yamlText);
         const events = data.events || [];
@@ -203,12 +203,12 @@ function createPublicationElement(entry) {
 async function loadPublications() {
     try {
         // Load FAWN publications
-        const fawnResponse = await fetch('fawns.bib');
+        const fawnResponse = await fetch('config/fawns.bib');
         const fawnText = await fawnResponse.text();
         const fawnEntries = parseBibTeX(fawnText);
 
         // Load related publications
-        const relatedResponse = await fetch('related.bib');
+        const relatedResponse = await fetch('config/related.bib');
         const relatedText = await relatedResponse.text();
         const relatedEntries = parseBibTeX(relatedText);
 
