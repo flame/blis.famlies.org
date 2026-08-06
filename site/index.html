@@ -48,12 +48,21 @@
     <!-- Main Content -->
     <main>
         <!-- Section 1: Motivation -->
-        <section id="about" class="content-section">
+        <section id="about" class="content-section fullheight">
             <div class="section-container">
                 <div class="section-content left">
-                    <h2>The Problem</h2>
-                    <p>For decades, BLAS and LAPACK have been the foundation of computational science. But their design enforces strict boundaries between layers—between single-node and multi-node computation, between matrix operations and tensor contractions, between CPU and GPU execution.</p>
-                    <p>These boundaries were once a strength, but are now a liability. Memory movement is the central bottleneck of modern hardware, and the only way to reduce it is to fuse operations across the stack. Existing libraries cannot do this.</p>
+                    <h2 class="section-title">The Problem</h2>
+                    <p>For decades, the BLAS, LAPACK, and LAPACK derivatives
+                    have been part of the foundation of computational science. But
+                    their design enforces strict boundaries between
+                    layers—between single-node and multi-node computation,
+                    between matrix operations and tensor contractions, between
+                    CPU and GPU execution.</p>
+                    <p>These boundaries were once a strength, but are now a
+                    liability. Memory movement is the central bottleneck of
+                    modern hardware, and one way to reduce it is to fuse
+                    operations across the stack. Existing libraries cannot do
+                    this.</p>
                 </div>
                 <div class="section-image right">
                     <div class="section-image-content">
@@ -65,7 +74,7 @@
         </section>
 
         <!-- Section 2: Solution -->
-        <section class="content-section bg-light">
+        <section class="content-section fullheight">
             <div class="section-container">
                 <div class="section-image left">
                     <div class="section-image-content">
@@ -74,24 +83,38 @@
                     </div>
                 </div>
                 <div class="section-content right">
-                    <h2>The Solution: FAMLIES</h2>
-                    <p><strong>FAMLIES can.</strong> By vertically integrating layers that are today rigidly separated—from BLAS-level kernels through LAPACK-equivalent routines to distributed tensor contractions—FAMLIES aims to eliminate the performance ceilings that hold back both scientific computing and modern AI workloads.</p>
-                    <p>This project lays the foundation for a new framework that overcomes challenges through vertical integration, the flexible control of algorithms and communication, and a consistent programming API across levels.</p>
+                    <h2 class="section-title">The Solution: FAMLIES</h2>
+                    <p><strong>FAMLIES can.</strong> By vertically integrating
+                    layers that are today rigidly separated—from BLAS-level
+                    kernel through LAPACK-equivalent routines to distributed
+                    tensor contractions—FAMLIES aims to reduce the performance
+                    ceilings that hold back both scientific computing and modern
+                    AI workloads.</p>
+                    <p>This project lays the foundation for a new framework that
+                    overcomes challenges through vertical integration, the
+                    flexible control of algorithms and communication, and a
+                    consistent programming API across levels.</p>
                 </div>
             </div>
         </section>
 
         <!-- Section 3: Research Objectives -->
-        <section class="content-section">
+        <section class="content-section fullheight">
             <div class="section-container">
                 <div class="objectives-grid">
                     <div class="objective-card objective-blue">
                         <h3>Algorithm Families, Not Hard-Coded Choices</h3>
-                        <p>FAMLIES automatically selects the best algorithmic variant for the problem size, target hardware, and memory hierarchy level—replacing the rigid, single-algorithm approach of LAPACK and its descendants.</p>
+                        <p>FAMLIES allows the best algorithmic variants to be
+                        selected for the problem size, target hardware, and
+                        memory hierarchy level—replacing the rigid, siloed approach of LAPACK and its
+                        descendants.</p>
                     </div>
                     <div class="objective-card objective-green">
                         <h3>Vertical Integration Across the Full Stack</h3>
-                        <p>A consistent API spanning from architecture micro-kernels up through distributed computation. Cross-layer fusion becomes possible, enabling communication-avoiding algorithms.</p>
+                        <p>A consistent API spanning from architecture
+                        micro-kernels up through distributed computation enables
+                        cross-layer fusion and communication reduction, while
+                        increasing expressiveness and flexibility.</p>
                     </div>
                     <div class="objective-card objective-purple">
                         <h3>Unified Linear and Tensor Algebra</h3>
@@ -102,7 +125,9 @@
                     </div>
                     <div class="objective-card objective-orange">
                         <h3>Portable, Architecture-Aware Performance</h3>
-                        <p>Targets x86-64, ARM, IBM POWER, RISC-V, and GPU accelerators with near-optimal performance on each through architecture-specific micro-kernels.</p>
+                        <p>Targets x86-64, ARM, IBM POWER, RISC-V, and GPU
+                        accelerators with near-optimal performance on each
+                        through architecture-specific micro-kernels.</p>
                     </div>
                 </div>
                 <div class="section-content">
@@ -114,7 +139,7 @@
         </section>
 
         <!-- Section 4: Impact -->
-        <section class="content-section bg-light">
+        <section class="content-section fullheight">
             <div class="section-container">
                 <div class="section-image left">
                     <div class="section-image-content">
@@ -123,7 +148,7 @@
                     </div>
                 </div>
                 <div class="section-content right">
-                    <h2>Impact on Scientific Computing</h2>
+                    <h2 class="section-title">Impact on Scientific Computing</h2>
                     <p>FAMLIES addresses fundamental challenges in scientific computing and machine learning:</p>
                     <ul class="impact-list">
                         <li>Reduces memory movement—the central bottleneck of modern hardware</li>
@@ -137,7 +162,7 @@
         </section>
 
         <!-- Section 5: Project Details -->
-        <section class="content-section">
+        <section class="content-section fullheight">
             <div class="section-container">
                 <div class="details-grid">
                     <div class="detail-item">
@@ -159,10 +184,10 @@
         </section>
 
         <!-- Section 6: Getting Started -->
-        <section class="content-section bg-light">
+        <section class="content-section fullheight">
             <div class="section-container">
                 <div class="section-content">
-                    <h2 class="section-title text-center">Get Involved</h2>
+                    <h2 class="section-title">Get Involved</h2>
                     <img src="images/get_involved.png" alt="Get Involved"
                         width="100%" height="auto" />
                 </div>

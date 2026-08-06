@@ -219,16 +219,14 @@ main {
 }
 
 .content-section {
-    min-height: 100vh;
     padding: 80px var(--spacing-unit) * 2;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.content-section.bg-light {
-    /* Removed for now so everything has white bg */
-    /* background-color: var(--light-bg); */
+.content-section.fullheight {
+    min-height: 100vh;
 }
 
 .section-container {
@@ -241,7 +239,7 @@ main {
 .section-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    gap: 2rem;
     align-items: center;
     padding-left: 2rem;
     padding-right: 2rem;
@@ -249,20 +247,13 @@ main {
 
 .section-container.wide {
     grid-template-columns: 1fr;
+    gap: 0rem;
 }
 
 .section-content {
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-.section-content h2 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    line-height: 1.3;
-    color: var(--primary-color);
 }
 
 .section-content p {
@@ -321,7 +312,7 @@ main {
     font-size: 2.5rem;
     font-weight: 700;
     margin-top: 3rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
     text-align: center;
     color: var(--primary-color);
 }
@@ -612,23 +603,13 @@ main {
 .personnel-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem;
+    gap: 2rem;
     margin-top: 2rem;
     padding: 0 2rem;
 }
 
 .personnel-section {
     grid-template-columns: 1fr;
-}
-
-/* Override grid layout for personnel page content containers */
-.content-section .section-container:has(> .personnel-grid),
-.content-section .section-container:has(> .institutions-grid),
-.content-section .section-container:has(> .opportunity-cards) {
-    display: block;
-    max-width: 100%;
-    margin: 0;
-    gap: 0;
 }
 
 .person-card {
@@ -777,7 +758,6 @@ main {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
-    margin-top: 2rem;
     padding: 0 2rem;
 }
 
@@ -825,12 +805,61 @@ main {
     line-height: 1.6;
 }
 
+/* Funding Grid */
+
+.funding-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 2rem;
+}
+
+.funding-card {
+    padding: 2rem;
+    background-color: var(--white);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.funding-card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    border-color: var(--accent-color);
+}
+
+.funding-card h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+}
+
+.funding-card img {
+    max-height: 120px;
+    width: auto;
+    object-fit: contain;
+}
+
+.funding-card p {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    line-height: 1.6;
+}
+
 /* ============================================
    PUBLICATIONS PAGE
    ============================================ */
 
 .publications-list {
+    display: grid;
+    grid-template-columns: 1fr;
     margin-top: 0;
+    gap: 2rem;
     padding-left: 2rem;
     padding-right: 2rem;
 }
@@ -840,7 +869,6 @@ main {
     background-color: var(--white);
     border-radius: 8px;
     border: 1px solid var(--border-color);
-    margin-bottom: 2rem;
     transition: all 0.3s ease;
 }
 
@@ -929,7 +957,6 @@ main {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
-    margin-top: 2rem;
     padding-left: 2rem;
     padding-right: 2rem;
 }
@@ -1458,6 +1485,15 @@ main {
         gap: 1.5rem;
     }
 
+    .personnel-grid,
+    .institutions-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .funding-grid {
+        grid-template-columns: 1fr;
+    }
+
     .objective-card,
     .cta-card,
     .detail-item {
@@ -1476,12 +1512,6 @@ main {
 
     .page-header p {
         font-size: 1rem;
-    }
-
-    /* Personnel page responsive */
-    .personnel-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
     }
 
     /* Events responsive */
@@ -1556,6 +1586,12 @@ main {
         height: 100vh;
     }
 
+    .personnel-grid,
+    .institutions-grid,
+    .funding-grid {
+        grid-template-columns: 1fr;
+    }
+
     .hero h1 {
         font-size: 2rem;
         margin-bottom: 0.8rem;
@@ -1617,11 +1653,6 @@ main {
 
     .page-header p {
         font-size: 0.9rem;
-    }
-
-    /* Personnel cards mobile */
-    .personnel-grid {
-        grid-template-columns: 1fr;
     }
 
     .person-image {
