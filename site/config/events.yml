@@ -23,7 +23,7 @@ events:
       project. This is your opportunity to connect with fellow researchers and
       developers in the field of high-performance linear/multilinear algebra and
       related fields."
-    event_link: "https://www.cs.utexas.edu/~flame/FAMLIES/Retreat2026/format.html"
+    event_link: "https://www.cs.utexas.edu/~flame/FAMLIES/Retreat2026/"
 
   - title: FAMLIES Retreat (Day 1)
     date: "2026-10-12"
@@ -34,7 +34,7 @@ events:
       project. This is your opportunity to connect with fellow researchers and
       developers in the field of high-performance linear/multilinear algebra and
       related fields."
-    event_link: "https://www.cs.utexas.edu/~flame/FAMLIES/Retreat2026/format.html"
+    event_link: "https://www.cs.utexas.edu/~flame/FAMLIES/Retreat2026/"
 
   - title: "FAMILIES Kickoff"
     date: "2026-08-21"
@@ -47,3 +47,6 @@ events:
       - "Devin A. Matthews"
       - "Bimal Gaudel"
     event_link: "https://smu.zoom.us/j/92799938502?pwd=YiPTogyKoTdzdtEFHLd35RWJ6Evnaw.1"
+    files:
+      - name: "FAMLIES white paper"
+        url: "https://arxiv.org/pdf/2604.07311"
