@@ -48,5 +48,7 @@ events:
       - "Bimal Gaudel"
     event_link: "https://smu.zoom.us/j/92799938502?pwd=YiPTogyKoTdzdtEFHLd35RWJ6Evnaw.1"
     files:
+      - name: "Recording of the FAMLIES Kickoff"
+        url: "https://youtu.be/X3DfBvMv31k"
       - name: "FAMLIES white paper"
         url: "https://arxiv.org/pdf/2604.07311"
